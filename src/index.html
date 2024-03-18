@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="./output.css" rel="stylesheet">
+    <title>Formulário</title>
+</head>
+
+<body>
+    <main class="">
+
+        <div class="fixed inset-0 flex bg-blue-100 justify-center items-center overflow-y-auto">
+
+            <form class="flex flex-col space-y-5 border border-black rounded-lg p-14 shadow-lg">
+
+                <h1 class="text-2xl text-center font-bold border-b border-black">Cadastre-se</h1>
+    
+                <div class="flex flex-col">
+                    <label for="name" class="font-semibold">Name</label>
+                    <input type="text" name="name" id="name" class="rounded-md">
+                </div>
+    
+                <div class="flex flex-col">
+                    <label for="cpf" class="font-semibold">CPF</label>
+                    <input type="text" name="cpf" id="cpf" class="rounded-md">
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="estado" class="font-semibold">Estado</label>
+                    <select name="estado" id="estado" class="rounded-md">
+                        <option value="Selecione">Selecione</option>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AP">AP</option>
+                        <option value="AM">AM</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MT">MT</option>
+                        <option value="MS">MS</option>
+                        <option value="MG">MG</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PR">PR</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SP">SP</option>
+                        <option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                    
+                </div>
+    
+                <div class="flex flex-col">
+                    <label for="email" class="font-semibold">E-mail</label>
+                    <input type="text" name="email" id="email" class="rounded-md">
+                </div>
+    
+                <div class="flex flex-col">
+                    <label for="date" class="font-semibold">Data</label>
+                    <input type="date" name="date" id="date" class="rounded-md">
+                </div>
+            
+                <button type="submit" class="px-3 text-gray-200 rounded-md bg-blue-500 shadow-md hover:scale-105 duration-75">Enviar</button>
+
+            </form>
+
+        </div>
+        
+    </main>
+
+    <script>
+        
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g,''); // Remove caracteres não numéricos
+
+            // Verifica se o CPF tem 11 dígitos
+            if (cpf.length !== 11) {
+                return false;
+            }
+
+            // Calcula o primeiro dígito verificador
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let resto = soma % 11;
+            let digitoVerificador1 = (resto < 2) ? 0 : 11 - resto;
+
+            // Verifica se o primeiro dígito verificador é igual ao fornecido no CPF
+            if (parseInt(cpf.charAt(9)) !== digitoVerificador1) {
+                return false;
+            }
+
+            // Calcula o segundo dígito verificador
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            resto = soma % 11;
+            let digitoVerificador2 = (resto < 2) ? 0 : 11 - resto;
+
+            // Verifica se o segundo dígito verificador é igual ao fornecido no CPF
+            if (parseInt(cpf.charAt(10)) !== digitoVerificador2) {
+                return false;
+            }
+
+            return true; // CPF é válido
+        }
+
+        function enviarFormulario(e) {
+            e.preventDefault();
+            const name = document.getElementById("name").value
+            const cpf = document.getElementById("cpf").value
+            const estado = document.getElementById("estado").value
+            const email = document.getElementById("email").value
+            const date = document.getElementById("date").value
+    
+            if (!name || !cpf || estado == "Selecione" || !email || !date) {
+                alert("Todos os campos devem ser preenchidos!")
+                return; // Para evitar o envio do formulário se houver campos em branco
+            }
+            
+            if (!validarCPF(cpf)){
+                alert("Forneça um CPF válido!")
+                return; // Para evitar o envio do formulário se houver campos em branco
+            }
+
+            // Objeto a ser enviado para o servidor
+            const data = {
+                name,
+                cpf,
+                estado,
+                email,
+                date
+            }
+            
+            console.log(data)
+            return;
+        }
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            const button = document.querySelector("button")
+            button.addEventListener("click", enviarFormulario)
+        });
+
+    </script>
+    
+</body>
+
+</html>
