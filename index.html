@@ -19,7 +19,7 @@
                 <h1 class="text-2xl text-center font-bold border-b border-black">Cadastre-se</h1>
     
                 <div class="flex flex-col">
-                    <label for="name" class="font-semibold">Name</label>
+                    <label for="name" class="font-semibold">Nome</label>
                     <input type="text" name="name" id="name" class="rounded-md">
                 </div>
     
@@ -69,7 +69,7 @@
                 </div>
     
                 <div class="flex flex-col">
-                    <label for="date" class="font-semibold">Data</label>
+                    <label for="date" class="font-semibold">Data de Nascimento</label>
                     <input type="date" name="date" id="date" class="rounded-md">
                 </div>
             
@@ -120,6 +120,24 @@
             return true; // CPF é válido
         }
 
+        function validarIdade(date) {
+            const hoje = new Date();
+            const dataNascimento = new Date(date);
+            const idade = hoje.getFullYear() - dataNascimento.getFullYear();
+            const mesAtual = hoje.getMonth() + 1;
+            const mesNascimento = dataNascimento.getMonth() + 1;
+
+            if (mesAtual < mesNascimento || (mesAtual === mesNascimento && hoje.getDate() < dataNascimento.getDate())) {
+                idade = idade - 1;
+            }
+
+            if (idade < 18){
+                return false
+            }
+
+            return true
+        }
+
         function enviarFormulario(e) {
             e.preventDefault();
             const name = document.getElementById("name").value
@@ -138,7 +156,12 @@
                 return; // Para evitar o envio do formulário se houver campos em branco
             }
 
-            // Objeto a ser enviado para o servidor
+            if (!validarIdade(date)){
+                alert("É necessário que você tenha no mínino 18 anos!")
+                return;
+            }
+
+            // Dados a serem enviados para o servidor
             const data = {
                 name,
                 cpf,
